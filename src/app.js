@@ -1,11 +1,10 @@
 const express = require('express');
 const fs = require('fs');
-const bodyParser = require('body-parser');
 
 const app = express();
 const port = 8080;
 
-app.use(bodyParser.json());
+app.use(express.json())
 
 const productsFilePath = 'products.json';
 const cartFilePath = 'cart.json';
