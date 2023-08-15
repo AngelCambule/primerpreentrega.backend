@@ -1,15 +1,46 @@
 [
-  {
-    "id": 1691429184268,
-    "products": [
-      {
-        "product": 2,
-        "quantity": 2
-      },
-      {
-        "product": 5,
-        "quantity": 6
-      }
-    ]
-  }
+	{
+		"id": 1691429184268,
+		"products": [
+			{
+				"product": 2,
+				"quantity": 2
+			},
+			{
+				"product": 5,
+				"quantity": 6
+			},
+			{
+				"product": {
+					"id": 42
+				},
+				"quantity": null
+			},
+			{
+				"product": {
+					"id": 2
+				},
+				"quantity": null
+			},
+			{
+				"product": {
+					"id": 4
+				},
+				"quantity": null
+			}
+		]
+	},
+	{
+		"id": 1691429184269,
+		"products": []
+	},
+	{
+		"id": 1691429184270,
+		"products": [
+			{
+				"product": 8,
+				"quantity": 4
+			}
+		]
+	}
 ]
