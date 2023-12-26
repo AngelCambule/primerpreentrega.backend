@@ -1,5 +1,5 @@
-const express = require('express');
-const ProductManager = require('./ProductManager');
+import express from 'express'
+import ProductManager from './ProductManager.js'
 
 const productsRouter = express.Router();
 const productManager = new ProductManager('products.json');
