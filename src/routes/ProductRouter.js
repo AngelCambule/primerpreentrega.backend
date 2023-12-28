@@ -8,7 +8,7 @@ router.get('/', async (req, res) => {
   const products = await productModel.paginate({},{ page: page || 1, limit: limit || 10 , sort: {precio: 1}})
   res.render('index',{
     title: 'Products',
-    products: products,
+    products,
     fileCss: 'styles.css'
   })
   console.log();

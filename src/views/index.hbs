@@ -1,6 +1,4 @@
 <div>
-    <h1>USER DESIGNADO:</h1>
-    <button id="lol">XD</button>
 
         
             <table>
@@ -27,10 +25,10 @@
         </tbody>
     </table>
     {{#if products.hasPrevPage}}
-        <a href="/products?page={{products.prevPage}}">Atras</a>
+        <a href="/api/products?page={{products.prevPage}}">Atras</a>
     {{/if}}
     {{#if products.hasNextPage}}
-        <a href="/products?page={{products.nextPage}}">Siguiente</a>
+        <a href="/api/products?page={{products.nextPage}}">Siguiente</a>
     {{/if}}
 
     <script src="/socket.io/socket.io.js"></script>

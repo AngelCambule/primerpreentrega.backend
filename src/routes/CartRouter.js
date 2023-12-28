@@ -18,16 +18,25 @@ router.get('/', async (req, res) => {
     totalCarrito
   })
 })
+
 router.get('/:cid', async (req, res) => {
   const idCart = req.params.cid
 
-  const cart = await cartModel.findById(idCart)
+  const cart = await cartModel.findById(idCart).populate('products.product')
+  let totalCarrito = 0
+  cart.products.forEach((c) => {
+    totalCarrito += c.product.precio*c.qty
+  })
+  console.log(cart);
 
-  res.render('cart', {
+  res.render('cartInd', {
     title: 'Cart',
-    cart
+    fileCss: 'styles.css',
+    cart,
+    totalCarrito
   })
 })
+
 router.put('/:cid', async (req, res) => {
   const idCart = req.params.cid
   const newProducts = req.body
