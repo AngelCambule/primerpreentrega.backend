@@ -1,0 +1,26 @@
+<div>
+    <table>
+        {{#each carts}}
+        <thead>
+                <th>Carrito de: {{user}}</th>
+            <tr>
+                <th>Producto</th>
+                <th>Precio</th>
+                <th>Cantidad</th>
+            </tr>
+        </thead>
+        <tbody>
+                {{#each this.products}}
+            <tr>
+                <td>{{product.nombre}}</td>
+                <td>{{product.precio}}</td>
+                <td>{{qty}}</td>
+            </tr>
+                {{/each}}
+        {{/each}}
+                 <tr>
+                <td>{{totalCarrito}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

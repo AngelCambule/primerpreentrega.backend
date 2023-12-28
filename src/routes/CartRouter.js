@@ -1,35 +1,72 @@
-const express = require('express');
-const CartManager = require('./CartManager');
+import { Router } from 'express'
+import { cartModel } from '../models/models.js';
+ 
+const router = Router();
 
-const cartsRouter = express.Router();
-const cartManager = new CartManager('cart.json');
+router.get('/', async (req, res) => {
+  const carts = await cartModel.find().populate('products.product')
+  let totalCarrito = 0
+  carts.forEach((c) => {
+    c.products.forEach((c1) => {
+      totalCarrito += c1.product.precio*c1.qty
+    })
+  })
+  res.render('cart',{
+    title: 'Cart',
+    fileCss: 'styles.css',
+    carts,
+    totalCarrito
+  })
+})
 
-cartsRouter.post('/', (req, res) => {
-  const newCart = req.body;
-  const cartId = cartManager.createCart(newCart);
-  res.status(201).json({ cartId });
-});
+router.put('/:cid', async (req, res) => {
+  const cartId = req.params.cid
+  const newProducts = req.body
 
-cartsRouter.get('/:cid', (req, res) => {
-  const cartId = req.params.cid;
-  const cart = cartManager.getCartById(cartId);
-  if (cart) {
-    res.json(cart.products);
-  } else {
-    res.status(404).json({ error: 'Carrito no encontrado' });
+  const cart = cartModel.findByAndUpdate(cartId,{$set: {products: newProducts}})
+  console.log(cart);
+  res.json(await cartModel.find())
+})
+
+router.put('/:cid/products/:pid', async (req, res) => {
+  const idCart = req.params.cid
+  const idProduct = req.params.pid
+  const newQty = req.body
+
+  const cart = await cartModel.findById(idCart)
+  const newProducts = cart.products.find((p) => p.product == idProduct)
+  newProducts.qty = newQty
+  const aa = await cartModel.findByIdAndUpdate(idCart, {$set: {products: {...newProducts}}})
+  console.log(newProducts);
+  res.json(await cartModel.find())
+})
+
+router.post('/:cid/add/products/:pid', async (req, res) => {
+  const idCart = req.params.cid
+  const idProduct = req.params.pid
+
+  const newProducts = {
+    product: idProduct,
+    qty: 1
   }
-});
-
-cartsRouter.post('/:cid/product/:pid', (req, res) => {
-  const cartId = req.params.cid;
-  const productId = parseInt(req.params.pid);
-  const success = cartManager.addToCart(cartId, productId);
   
-  if (success) {
-    res.json({ message: 'Producto agregado al carrito' });
-  } else {
-    res.status(404).json({ error: 'Carrito o producto no encontrado' });
-  }
-});
+  const aa = await cartModel.findByIdAndUpdate(idCart, {$push: {products: {...newProducts}}})
+  console.log(aa);
+  res.json(await cartModel.find())
 
-module.exports = cartsRouter;
+})
+
+router.delete('/:cid/products/:pid', async (req, res) => {
+  const idCart = req.params.cid
+  const idProduct = req.params.pid
+
+  const cart = await cartModel.findById(idCart)
+  const newProducts = cart.products.find((p) => p.product != idProduct)
+  const aa = await cartModel.findByIdAndUpdate(idCart, {$set: {products: newProducts}})
+  console.log(aa);
+  res.json(await cartModel.find())
+})
+
+
+
+export default router

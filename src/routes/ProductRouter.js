@@ -1,43 +1,17 @@
-import express from 'express'
-import ProductManager from './ProductManager.js'
+import { Router } from 'express'
+import { productModel } from "../models/models.js";
 
-const productsRouter = express.Router();
-const productManager = new ProductManager('products.json');
+const router = Router();
 
-productsRouter.get('/', (req, res) => {
-  const products = productManager.getProducts();
-  res.json(products);
-});
+router.get('/', async (req, res) => {
+  const { page, limit } = req.query
+  const products = await productModel.paginate({},{ page: page || 1, limit: limit || 10 , sort: {precio: 1}})
+  res.render('index',{
+    title: 'Products',
+    products: products,
+    fileCss: 'styles.css'
+  })
+  console.log();
+})
 
-productsRouter.get('/:pid', (req, res) => {
-  const productId = parseInt(req.params.pid);
-  const product = productManager.getProductById(productId);
-  if (product) {
-    res.json(product);
-  } else {
-    res.status(404).json({ error: 'Producto no encontrado' });
-  }
-});
-
-productsRouter.post('/', (req, res) => {
-  const newProduct = req.body;
-  productManager.addProduct(newProduct);
-  res.status(201).json({ message: 'Producto agregado' });
-});
-
-productsRouter.put('/:pid', (req, res) => {
-  const productId = parseInt(req.params.pid);
-  const updatedProduct = req.body;
-  productManager.updateProduct(productId, updatedProduct);
-  res.json({ message: 'Producto actualizado correctamente' });
-});
-
-productsRouter.delete('/:pid', (req, res) => {
-  const productId = parseInt(req.params.pid);
-  productManager.deleteProduct(productId);
-  
-    res.json({ message: 'Producto borrado exitosamente' });
-  
-});
-
-module.exports = productsRouter;
+export default router
